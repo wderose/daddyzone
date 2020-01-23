@@ -49,7 +49,7 @@ class TransactionsSpider(CrawlSpider):
     ]
     custom_settings = {
         'FEED_FORMAT': 'csv',
-        'FEED_URI': 'test.csv'
+        'FEED_URI': 'stats.csv'
     }
 
     rules = (
@@ -115,12 +115,12 @@ class TransactionsSpider(CrawlSpider):
                     overall_rows = soup.findAll("table", {"class" : "dbd"})[0].findAll('tr')
                     if not overall_rows:
                         logging.info("""
-                            Could not find any data for the split:\n
-                            {0}
+                            Could not find any data for {0} over the split:\n
+                            {1}
                             Usually this means the player is a pitcher with no batting stats 
                             over this time range. We should update the crawler to log pitching
                             stats in this case.
-                        """)
+                        """.format(item["player"], split))
                         return
                     stat_names = overall_rows[0].findAll('th')[1:]  
                     stats = overall_rows[1].findAll('td')[1:]
